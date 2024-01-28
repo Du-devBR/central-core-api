@@ -10,8 +10,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model testDb {
-  id String @id @default(uuid())
+enum Role {
+  ADMIN
+  MEMBER
+}
 
-  @@map("test")
+model User {
+  id          String     @id @default(uuid())
+  name        String
+  lastname    String
+  email       String     @unique
+  github      String     @unique
+  cretated_at DateTime   @default(now())
+  modified_at DateTime
+  role        Role       @default(MEMBER)
+  Answer      Answer[]
+  Question    Question[]
+
+  @@map("users")
+}
+
+model Question {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  cretated_at DateTime @default(now())
+  modified_at DateTime
+  user_id     String
+  question    User     @relation(fields: [user_id], references: [id])
+  Answer      Answer[]
+
+  @@map("questions")
+}
+
+model Answer {
+  id          String   @id @default(uuid())
+  content     String
+  cretated_at DateTime @default(now())
+  modified_at DateTime
+  question_id String
+  question    Question @relation(fields: [question_id], references: [id])
+  user_id     String
+  user        User     @relation(fields: [user_id], references: [id])
+
+  @@map("answers")
 }
