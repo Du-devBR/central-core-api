@@ -1,0 +1,10 @@
+version: '3'
+services:
+  api-central-pg:
+    image: bitnami/postgresql
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=central
+      - POSTGRESQL_PASSWORD=c3ntr@1
+      - POSTGRESQL_DATABASE=central
