@@ -22,6 +22,7 @@ ALTER COLUMN "modified_at" DROP NOT NULL;
 
 -- AlterTable
 ALTER TABLE "users" ADD COLUMN     "password" TEXT NOT NULL,
+ALTER COLUMN "github" DROP NOT NULL,
 ALTER COLUMN "modified_at" DROP NOT NULL;
 
 -- CreateTable
