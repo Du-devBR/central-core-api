@@ -21,7 +21,7 @@ model User {
   lastname         String
   password_hash    String
   email            String             @unique
-  github           String?            @unique
+  github           String?
   cretated_at      DateTime           @default(now())
   modified_at      DateTime?
   role             Role               @default(MEMBER)
