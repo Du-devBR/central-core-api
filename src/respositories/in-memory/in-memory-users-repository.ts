@@ -1,0 +1,33 @@
+import { $Enums, Prisma, User } from "@prisma/client";
+import { UsersRespository } from "../interfaces/users-repository";
+import { randomUUID } from "crypto";
+
+export class InMemoryUsersRepository implements UsersRespository {
+  public items: User[] = [];
+  async findByEmail(email: string) {
+    const user = this.items.find((item) => item.email === email);
+
+    if (!user) {
+      return null;
+    }
+    return user;
+  }
+
+  async create(data: Prisma.UserCreateInput) {
+    const user = {
+      id: randomUUID(),
+      name: data.name,
+      lastname: data.lastname,
+      email: data.email,
+      password_hash: data.password_hash,
+      github: null,
+      cretated_at: new Date(),
+      modified_at: null,
+      role: $Enums.Role.MEMBER,
+    };
+
+    this.items.push(user);
+
+    return user;
+  }
+}
