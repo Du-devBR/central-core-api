@@ -1,3 +1,4 @@
+import { NonStandardPasswordError } from "@/use-cases/exceptions/non-standard-password-error";
 import { UserAlreadyExistsError } from "@/use-cases/exceptions/user-already-exists-error";
 import { makeRegisterUseCase } from "@/use-cases/factories/users/make-register-use-case";
 import { FastifyReply, FastifyRequest } from "fastify";
@@ -25,7 +26,10 @@ export async function register(req: FastifyRequest, reply: FastifyReply) {
       password,
     });
   } catch (err) {
-    if (err instanceof UserAlreadyExistsError) {
+    if (
+      err instanceof UserAlreadyExistsError ||
+      err instanceof NonStandardPasswordError
+    ) {
       return reply.status(409).send({ message: err.message });
     }
 
