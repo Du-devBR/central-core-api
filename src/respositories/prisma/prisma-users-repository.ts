@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
-import { UsersRespository } from "../interfaces/users-repository";
+import { UsersRespository } from "../interfaces/users-repository-interface";
 
 export class PrismaUsersRepository implements UsersRespository {
   async findById(id: string) {
