@@ -32,6 +32,7 @@ export class InMemoryUsersRepository implements UsersRespository {
       email: data.email,
       password_hash: data.password_hash,
       github: null,
+      email_status: $Enums.EmailCheck.UNCHECKED,
       cretated_at: new Date(),
       modified_at: null,
       role: $Enums.Role.MEMBER,

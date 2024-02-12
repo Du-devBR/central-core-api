@@ -3,15 +3,24 @@ import { RegisterUseCase } from "./register";
 import { InMemoryUsersRepository } from "@/respositories/in-memory/in-memory-users-repository";
 import { UserAlreadyExistsError } from "../exceptions/user-already-exists-error";
 import { NonStandardPasswordError } from "../exceptions/non-standard-password-error";
+import { TokenConfirmeAccountUseCase } from "../token/token-confirme-account-use-case";
+import { InMemorySendEmailRepository } from "@/respositories/in-memory/in-memory-send-email-repository";
 
 let usersRepository: InMemoryUsersRepository;
+let sendEmailUseCase: InMemorySendEmailRepository;
+let tokenUseCase: TokenConfirmeAccountUseCase;
 let sut: RegisterUseCase;
 
 describe("Register use case", () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
+    sendEmailUseCase = new InMemorySendEmailRepository();
+    // tokenUseCase = new TokenConfirmeAccountUseCase();
+    tokenUseCase = {
+      generateToken: () => "generatedToken",
+    };
     // system under test
-    sut = new RegisterUseCase(usersRepository);
+    sut = new RegisterUseCase(usersRepository, sendEmailUseCase, tokenUseCase);
   });
   it("should to register", async () => {
     const { user } = await sut.execute({
@@ -55,5 +64,27 @@ describe("Register use case", () => {
         password,
       }),
     ).rejects.toBeInstanceOf(NonStandardPasswordError);
+  });
+
+  it("should generate a token with the user id", async () => {
+    const { user } = await sut.execute({
+      name: "John",
+      lastname: "Doe",
+      email: "john@example.com",
+      password: "1@Abcdefg",
+    });
+
+    expect(tokenUseCase.generateToken(user.id)).toEqual("generatedToken");
+  });
+
+  it("should send email to confirmation account", async () => {
+    const { user } = await sut.execute({
+      name: "John",
+      lastname: "Doe",
+      email: "john@example.com",
+      password: "1@Abcdefg",
+    });
+
+    expect(sendEmailUseCase.emailSent(user.email)).toBe(true);
   });
 });

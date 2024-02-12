@@ -5,7 +5,7 @@ import { UserAlreadyExistsError } from "../exceptions/user-already-exists-error"
 import { regexValidatePassword } from "@/utils/regex-validate-password";
 import { NonStandardPasswordError } from "../exceptions/non-standard-password-error";
 import { SendEmailInterface } from "@/respositories/interfaces/send-email-interface";
-import { TokenUseCase } from "../token/token-use-case";
+import { TokenConfirmeAccountUseCase } from "../token/token-confirme-account-use-case";
 
 interface RegisterUseCaseRequest {
   name: string;
@@ -21,16 +21,16 @@ interface RegisterUseCaseResponse {
 export class RegisterUseCase {
   private usersRepository: UsersRespository;
   private sendEmailService: SendEmailInterface;
-  private tokenService: TokenUseCase;
+  private tokenConfirmeAccountUseCase: TokenConfirmeAccountUseCase;
 
   constructor(
     usersRepository: UsersRespository,
     sendEmailService: SendEmailInterface,
-    tokenService: TokenUseCase,
+    tokenConfirmeAccountUseCase: TokenConfirmeAccountUseCase,
   ) {
     this.usersRepository = usersRepository;
     this.sendEmailService = sendEmailService;
-    this.tokenService = tokenService;
+    this.tokenConfirmeAccountUseCase = tokenConfirmeAccountUseCase;
   }
 
   async execute({
@@ -57,7 +57,7 @@ export class RegisterUseCase {
       password_hash,
     });
 
-    const token = this.tokenService.generateToken(email);
+    const token = this.tokenConfirmeAccountUseCase.generateToken(user.id);
 
     await this.sendEmailService.sendEmail(email, token);
 
