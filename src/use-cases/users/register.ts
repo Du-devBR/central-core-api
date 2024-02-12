@@ -4,6 +4,8 @@ import { hash } from "bcryptjs";
 import { UserAlreadyExistsError } from "../exceptions/user-already-exists-error";
 import { regexValidatePassword } from "@/utils/regex-validate-password";
 import { NonStandardPasswordError } from "../exceptions/non-standard-password-error";
+import { SendEmailInterface } from "@/respositories/interfaces/send-email-interface";
+import { TokenUseCase } from "../token/token-use-case";
 
 interface RegisterUseCaseRequest {
   name: string;
@@ -17,8 +19,19 @@ interface RegisterUseCaseResponse {
 }
 
 export class RegisterUseCase {
-  // eslint-disable-next-line no-useless-constructor
-  constructor(private usersRepository: UsersRespository) {}
+  private usersRepository: UsersRespository;
+  private sendEmailService: SendEmailInterface;
+  private tokenService: TokenUseCase;
+
+  constructor(
+    usersRepository: UsersRespository,
+    sendEmailService: SendEmailInterface,
+    tokenService: TokenUseCase,
+  ) {
+    this.usersRepository = usersRepository;
+    this.sendEmailService = sendEmailService;
+    this.tokenService = tokenService;
+  }
 
   async execute({
     name,
@@ -43,6 +56,10 @@ export class RegisterUseCase {
       email,
       password_hash,
     });
+
+    const token = this.tokenService.generateToken(email);
+
+    await this.sendEmailService.sendEmail(email, token);
 
     return {
       user,
