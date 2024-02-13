@@ -30,4 +30,15 @@ export class PrismaUsersRepository implements UsersRespository {
 
     return user;
   }
+
+  async updateCheckedStatus(id: string) {
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: { email_status: "CKECKED" },
+    });
+
+    return user;
+  }
 }
