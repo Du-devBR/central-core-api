@@ -5,6 +5,7 @@ import { UserAlreadyExistsError } from "../exceptions/user-already-exists-error"
 import { NonStandardPasswordError } from "../exceptions/non-standard-password-error";
 import { TokenConfirmeAccountUseCase } from "../token/token-confirme-account-use-case";
 import { InMemorySendEmailRepository } from "@/respositories/in-memory/in-memory-send-email-repository";
+import { $Enums } from "@prisma/client";
 
 let usersRepository: InMemoryUsersRepository;
 let sendEmailUseCase: InMemorySendEmailRepository;
@@ -86,5 +87,18 @@ describe("Register use case", () => {
     });
 
     expect(sendEmailUseCase.emailSent(user.email)).toBe(true);
+  });
+
+  it("should be possible to update the email status", async () => {
+    const { user } = await sut.execute({
+      name: "John",
+      lastname: "Doe",
+      email: "john@example.com",
+      password: "1@Abcdefg",
+    });
+
+    const updatedUser = await usersRepository.updateCheckedStatus(user.id);
+    expect(updatedUser).toBeDefined();
+    expect(updatedUser?.email_status).toEqual($Enums.EmailCheck.CKECKED);
   });
 });

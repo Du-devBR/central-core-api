@@ -42,4 +42,13 @@ export class InMemoryUsersRepository implements UsersRespository {
 
     return user;
   }
+
+  async updateCheckedStatus(id: string) {
+    const user = this.items.find((item) => item.id === id);
+    if (!user) {
+      return null;
+    }
+    user.email_status = $Enums.EmailCheck.CKECKED;
+    return user;
+  }
 }
