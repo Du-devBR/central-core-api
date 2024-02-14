@@ -51,7 +51,7 @@ export class PrismaUsersRepository implements UsersRespository {
 
   /**
    * Update email_staus user in database
-   * @param {string} id - Parameter id type string for update user
+   * @param {string} id - Parameter id type string for update
    */
 
   async updateCheckedStatus(id: string) {

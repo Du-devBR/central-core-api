@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "questions" ALTER COLUMN "likes" DROP NOT NULL,
+ALTER COLUMN "saved" DROP NOT NULL,
+ALTER COLUMN "shared" DROP NOT NULL;

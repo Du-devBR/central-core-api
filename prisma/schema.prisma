@@ -43,13 +43,13 @@ model Question {
   id               String             @id @default(uuid())
   title            String
   content          String
-  likes            Int
-  saved            Int
-  shared           Int
+  likes            Int?
+  saved            Int?
+  shared           Int?
   cretated_at      DateTime           @default(now())
   modified_at      DateTime?
   user_id          String
-  question         User               @relation(fields: [user_id], references: [id])
+  user             User               @relation(fields: [user_id], references: [id])
   Answer           Answer[]
   FavoriteQuestion FavoriteQuestion[]
 
