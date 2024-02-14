@@ -4,6 +4,13 @@ import { TokenConfirmeAccountUseCase } from "@/use-cases/token/token-confirme-ac
 import { RegisterUseCase } from "@/use-cases/users/register";
 
 export function makeRegisterUseCase() {
+  /**
+   * Factory for create an instance of registerUseCase with:
+   * @instance {PrismaUsersRepository}
+   * @instance {SendEmailConfirmAccount}
+   * @instance {TokenConfirmeAccountUseCase}
+   * @returns {RegisterUseCase}
+   */
   const usersRepository = new PrismaUsersRepository();
   const sendEmailUseCase = new SendEmailConfirmAccount();
   const tokenUseCase = new TokenConfirmeAccountUseCase();

@@ -33,6 +33,12 @@ export class RegisterUseCase {
     this.tokenConfirmeAccountUseCase = tokenConfirmeAccountUseCase;
   }
 
+  /**
+   * Execute the use case for user registration
+   * @param {RegisterUseCaseRequest} - data required for registration
+   * @returns {Promise<RegisterUseCaseResponse>} - server response with registered user
+   */
+
   async execute({
     name,
     lastname,
@@ -41,13 +47,20 @@ export class RegisterUseCase {
   }: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
     const userWithSameEmail = await this.usersRepository.findByEmail(email);
 
+    /** Throws an exception if the user is already registered with the same email
+     * @throws {UserAlreadyExistsError}
+     */
     if (userWithSameEmail) {
       throw new UserAlreadyExistsError();
     }
 
+    /** Throws an exception if the password provided does not meet the standard '@Aa1'
+     * @throws {NonStandardPasswordError}
+     */
     if (!regexValidatePassword(password)) {
       throw new NonStandardPasswordError();
     }
+
     const password_hash = await hash(password, 6);
 
     const user = await this.usersRepository.create({
