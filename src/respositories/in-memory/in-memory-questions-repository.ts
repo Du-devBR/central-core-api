@@ -22,4 +22,8 @@ export class InMemoryQuestionsRepository implements QuestionsRespository {
 
     return question;
   }
+
+  async findAll() {
+    return this.items;
+  }
 }

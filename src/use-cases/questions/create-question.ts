@@ -11,7 +11,7 @@ interface QuestionUseCaseResponse {
   question: Question;
 }
 
-export class QuestionUseCase {
+export class CreateQuestionUseCase {
   private questionsRepository: QuestionsRespository;
 
   constructor(questionsRepository: QuestionsRespository) {
@@ -19,8 +19,8 @@ export class QuestionUseCase {
   }
 
   /**
-   * Execute the use case for user registration
-   * @param {QuestionUseCaseRequest} - data required for registration
+   * Execute the use case for user create a new question
+   * @param {QuestionUseCaseRequest} - data required for create question
    * @returns {Promise<QuestionUseCaseResponse>} - server response with Questioned user
    */
 
