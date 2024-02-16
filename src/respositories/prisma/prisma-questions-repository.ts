@@ -1,0 +1,28 @@
+import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
+import { QuestionsRespository } from "../interfaces/questions-repository-interface";
+
+/**
+ * Question repository deployment
+ * @implements {QuestionsRespository}
+ */
+export class PrismaQuestionsRepository implements QuestionsRespository {
+  /**
+   * Create question in database
+   * @param {Prisma.UserUncheckedCreateInput} data - Parameter data for create a question
+   */
+
+  async create(data: Prisma.QuestionUncheckedCreateInput) {
+    const question = await prisma.question.create({
+      data,
+    });
+
+    return question;
+  }
+
+  async findAll() {
+    const questions = await prisma.question.findMany();
+
+    return questions;
+  }
+}
