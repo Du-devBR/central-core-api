@@ -1,7 +1,7 @@
 import { QuestionsRespository } from "@/respositories/interfaces/questions-repository-interface";
 import { Question } from "@prisma/client";
 
-interface QuestionUseCaseResponse {
+interface QuestionsUseCaseResponse {
   question: Question[];
 }
 
@@ -13,13 +13,13 @@ export class GetAllQuestionsUseCase {
   }
 
   /**
-   * Execute the use case for user registration
+   * Execute the use case for find all questions
 
-   * @returns {Promise<QuestionUseCaseResponse>} - server response with Questioned user
+   * @returns {Promise<QuestionUseCaseResponse>} - server response all questions
    */
 
-  async execute(): Promise<QuestionUseCaseResponse> {
-    const question = await this.questionsRepository.getAll();
+  async execute(): Promise<QuestionsUseCaseResponse> {
+    const question = await this.questionsRepository.findAll();
 
     return {
       question,
