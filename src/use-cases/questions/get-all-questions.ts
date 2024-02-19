@@ -2,7 +2,7 @@ import { QuestionsRespository } from "@/respositories/interfaces/questions-repos
 import { Question } from "@prisma/client";
 
 interface QuestionsUseCaseResponse {
-  question: Question[];
+  questions: Question[];
 }
 
 export class GetAllQuestionsUseCase {
@@ -19,10 +19,10 @@ export class GetAllQuestionsUseCase {
    */
 
   async execute(): Promise<QuestionsUseCaseResponse> {
-    const question = await this.questionsRepository.findAll();
+    const questions = await this.questionsRepository.findAll();
 
     return {
-      question,
+      questions,
     };
   }
 }
