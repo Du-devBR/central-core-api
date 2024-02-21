@@ -24,9 +24,9 @@ describe("Get all Questions use case", () => {
       user_id: "user2",
     });
 
-    const { question } = await sut.execute();
+    const { questions } = await sut.execute();
 
-    expect(question).toContainEqual(question1);
-    expect(question).toContainEqual(question2);
+    expect(questions).toContainEqual(question1);
+    expect(questions).toContainEqual(question2);
   });
 });

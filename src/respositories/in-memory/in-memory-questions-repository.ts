@@ -26,4 +26,14 @@ export class InMemoryQuestionsRepository implements QuestionsRespository {
   async findAll() {
     return this.items;
   }
+
+  async findById(id: string) {
+    const question = this.items.find((item) => item.id === id);
+
+    if (!question) {
+      return null;
+    }
+
+    return question;
+  }
 }
