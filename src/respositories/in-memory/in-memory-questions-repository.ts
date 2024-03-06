@@ -36,4 +36,12 @@ export class InMemoryQuestionsRepository implements QuestionsRespository {
 
     return question;
   }
+
+  async findByTextTyped(text: string) {
+    const question = this.items.filter((item) => {
+      return item.title.includes(text) || item.content.includes(text);
+    });
+
+    return question;
+  }
 }

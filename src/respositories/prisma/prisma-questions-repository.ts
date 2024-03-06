@@ -39,4 +39,25 @@ export class PrismaQuestionsRepository implements QuestionsRespository {
 
     return question;
   }
+
+  async findByTextTyped(text: string) {
+    const question = await prisma.question.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: text,
+            },
+          },
+          {
+            title: {
+              contains: text,
+            },
+          },
+        ],
+      },
+    });
+
+    return question;
+  }
 }
