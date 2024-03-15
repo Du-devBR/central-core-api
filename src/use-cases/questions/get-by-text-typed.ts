@@ -25,7 +25,8 @@ export class GetByTextTypedQuestionUseCase {
   async execute({
     text,
   }: QuestionUseCaseRequest): Promise<QuestionsUseCaseResponse> {
-    const question = await this.questionRepository.findByTextTyped(text);
+    const searchTerm = text.toLowerCase();
+    const question = await this.questionRepository.findByTextTyped(searchTerm);
 
     return {
       question,

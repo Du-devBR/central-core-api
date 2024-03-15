@@ -24,7 +24,7 @@ describe("Get question by text typed use case", () => {
       user_id: "user1",
     });
 
-    const inputText = "tion";
+    const inputText = "io";
 
     const result = await sut.execute({ text: inputText });
 
