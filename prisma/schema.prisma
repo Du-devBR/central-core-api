@@ -59,7 +59,7 @@ model Question {
 model Answer {
   id           String    @id @default(uuid())
   content      String
-  likes        Int
+  likes        Int?
   cretated_at  DateTime  @default(now())
   modified_at  DateTime?
   question_id  String
