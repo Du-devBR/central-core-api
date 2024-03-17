@@ -5,6 +5,7 @@ interface AnswerUseCaseRequest {
   userId: string;
   questionId: string;
   content: string;
+  parentId?: string;
 }
 
 interface AnswerUseCaseResponse {
@@ -28,11 +29,13 @@ export class CreateAnswerUseCase {
     userId,
     content,
     questionId,
+    parentId,
   }: AnswerUseCaseRequest): Promise<AnswerUseCaseResponse> {
     const answer = await this.answerRepository.create({
       user_id: userId,
       content,
       question_id: questionId,
+      parent_id: parentId,
     });
 
     return {
