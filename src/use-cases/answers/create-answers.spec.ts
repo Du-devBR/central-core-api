@@ -11,13 +11,6 @@ describe("Answer use case", () => {
     sut = new CreateAnswerUseCase(answerRepository);
   });
   it("should to register new answer to the question", async () => {
-    // const { question } = await sut.execute({
-    //   title: "John",
-    //   content: "Doe",
-    //   userId: "1235",
-    // });
-    // expect(question.id).toEqual(expect.any(String));
-
     const { answer } = await sut.execute({
       userId: "a",
       questionId: "b",
@@ -25,5 +18,24 @@ describe("Answer use case", () => {
     });
 
     expect(answer.id).toEqual(expect.any(String));
+  });
+
+  it("should to register a new child answer through the parent answer", async () => {
+    const parent1 = await answerRepository.create({
+      user_id: "a",
+      question_id: "b",
+      content: "test",
+    });
+
+    console.log(parent1);
+
+    const { answer } = await sut.execute({
+      userId: "a",
+      questionId: "b",
+      content: "teste",
+      parentId: parent1.id,
+    });
+
+    console.log(answer);
   });
 });

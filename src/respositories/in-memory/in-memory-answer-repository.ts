@@ -11,10 +11,10 @@ export class InMemoryAnswerRepository implements AnswersRepository {
       content: data.content,
       user_id: data.user_id,
       question_id: data.question_id,
-      parent_id: randomUUID(),
       likes: null,
       cretated_at: new Date(),
       modified_at: null,
+      parent_id: data.parent_id || null,
     };
 
     this.items.push(answer);
