@@ -27,8 +27,6 @@ describe("Answer use case", () => {
       content: "test",
     });
 
-    console.log(parent1);
-
     const { answer } = await sut.execute({
       userId: "a",
       questionId: "b",
@@ -37,5 +35,7 @@ describe("Answer use case", () => {
     });
 
     console.log(answer);
+
+    expect(answer.parent_id).toEqual(parent1.id);
   });
 });

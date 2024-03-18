@@ -32,10 +32,10 @@ export class CreateAnswerUseCase {
     parentId,
   }: AnswerUseCaseRequest): Promise<AnswerUseCaseResponse> {
     const answer = await this.answerRepository.create({
-      user_id: userId,
       content,
+      user_id: userId,
       question_id: questionId,
-      parent_id: parentId,
+      parent_id: parentId || null,
     });
 
     return {
