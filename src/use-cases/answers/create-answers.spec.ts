@@ -33,9 +33,6 @@ describe("Answer use case", () => {
       content: "teste",
       parentId: parent1.id,
     });
-
-    console.log(answer);
-
     expect(answer.parent_id).toEqual(parent1.id);
   });
 });

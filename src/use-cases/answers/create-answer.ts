@@ -21,8 +21,8 @@ export class CreateAnswerUseCase {
 
   /**
    * Execute the use case for user create a new answer to a question
-   * @param {QuestionUseCaseRequest} - data required for create answer
-   * @returns {Promise<QuestionUseCaseResponse>} - server response with Answer user
+   * @param {AnswerUseCaseRequest} - data required for create answer
+   * @returns {Promise<AnswerUseCaseResponse>} - server response with Answer user
    */
 
   async execute({
