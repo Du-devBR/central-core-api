@@ -24,8 +24,16 @@ export class InMemoryAnswerRepository implements AnswersRepository {
 
   async findAllAnswersParentInTheQuestion(questionId: string) {
     const answers = this.items.filter(
+      (answer) => answer.question_id === questionId,
+    );
+
+    return answers;
+  }
+
+  async findAllAnswersChildInTheParent(questionId: string, parentId: string) {
+    const answers = this.items.filter(
       (answer) =>
-        answer.question_id === questionId && answer.parent_id === null,
+        answer.question_id === questionId && answer.parent_id === parentId,
     );
 
     return answers;
