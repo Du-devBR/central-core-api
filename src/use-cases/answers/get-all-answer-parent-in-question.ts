@@ -24,13 +24,15 @@ export class GetAllAnswerInQuestionUseCase {
   async execute({
     questionId,
   }: AnswerUseCaseRequest): Promise<AnswerUseCaseResponse> {
-    const answers =
+    const allAnswers =
       await this.answersRepository.findAllAnswersParentInTheQuestion(
         questionId,
       );
 
+    const filteredAnswers = allAnswers.filter((answers) => !answers.parent_id);
+
     return {
-      answers,
+      answers: filteredAnswers,
     };
   }
 }

@@ -19,4 +19,25 @@ export class PrismaAnswerRepository implements AnswersRepository {
 
     return answer;
   }
+
+  async findAllAnswersParentInTheQuestion(questionId: string) {
+    const answers = await prisma.answer.findMany({
+      where: {
+        question_id: questionId,
+      },
+    });
+
+    return answers;
+  }
+
+  async findAllAnswersChildInTheParent(questionId: string, parentId: string) {
+    const answers = await prisma.answer.findMany({
+      where: {
+        question_id: questionId,
+        parent_id: parentId,
+      },
+    });
+
+    return answers;
+  }
 }
