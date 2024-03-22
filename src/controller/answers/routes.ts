@@ -5,8 +5,7 @@ import { getAllAnswerInQuestion } from "./get-all-answer-in-question";
 import { getAllAnswerChildInParent } from "./get-all-answer-child-in-parent";
 
 export async function answersRoutes(app: FastifyInstance) {
-  // app.addHook("onRequest", verifyJwtAuth);
-  app.post("/answer", createAnswer);
+  app.post("/answer", { onRequest: [verifyJwtAuth] }, createAnswer);
   app.get("/question/:questionId/answers", getAllAnswerInQuestion);
   app.get("/question/:questionId/answer/:parentId", getAllAnswerChildInParent);
 }
