@@ -1,0 +1,99 @@
+@startuml
+autonumber
+
+actor Usuario as User
+boundary VisualizarFeed as viewFeed
+boundary PublicarQuestao as PublicQuestion
+boundary PublicarResposta as PublicAnswer
+boundary Login as Login
+boundary Cadastro as Register
+boundary ConfirmarConta as ConfirmAccount
+boundary RecuperarSenha as RecoveryPassword
+boundary NovaSenha as NewPassword
+control     Servidor       as System
+database    Banco_de_Dados as DB
+
+User -> ViewFeed : document.ready()
+User -> PublicQuestion : valida_login()
+User -> PublicAnswer: valida_login()
+User -> Register : cria_cadastro()
+User -> Register : confirar_conta()
+User -> RecoveryPassword: recuperar_senha()
+User -> NewPassword: criar_nova_senha()
+
+alt user.acess_token !== null
+    PublicQuestion -[#green]x Login: redirect()
+    PublicAnswer-[#green]x Login: redirect()
+    note right: Redireciona o usuario para tela de login
+end
+
+User -> Login: autenticar(email: string, password: string)
+Login -> System : controlador_usuario(email: string, password: string): User
+System -> DB: buscar_usuario(email: string, password: string): User
+
+alt User === null
+    rnote over System #FFAAAA: Usuario não foi encontrado\ne deve retornar uma mensagem\nde erro para o usuario.
+    DB --[#red]> System: new Error("Usuario não encontrado")
+    System -[#red]x Login: HttpsResponse(401, "Credenciais invalidas")
+else
+    rnote over System #c0e9dd: Usuario encontrado\ne deve retornar uma mensagem\nde sucesso para o usuario.
+    DB --[#green]> System:
+    System -[#green]> Login: HttpsResponse(200, "Usuario logado com sucesso")
+    note over Login: Usuário deve ser redirecionado para tela de criação de questões.
+    Login -[#green]x PublicQuestion: redirect()
+end
+
+User -> Register: cadastro(name: string, lastname: string, email: string, password: string, github: string,\n role: Enum, email_status: string)
+
+Register -> System: constrolador_cadastro\n(name: string, lastname: string, email: string,\n password: string, github: string, role: Enum,\n email_status: string): User
+
+System -> DB: verificar_email\n(name: string, lastname: string, email: string,\n password: string, github: string, role: Enum,\n email_status: string): User
+
+alt User.email === null
+    rnote over System #c0e9dd: Email não encontrado no DB\ne deve retornar uma mensagem\nde sucesso para o usuario.
+    DB -[#red]> System: new Error("Email já cadatrado no banco de dados!")
+    System -[#red]x Register: HTTPResponse(400, "Email já consta cadastrado")
+else
+    DB -[#green]> System:
+    System -[#green]> Register: HTTPResponse(200, "Usuário cadastrado com sucesso, confirme sua conta")
+    note over Regiter: Usuário deve deve confirmar email de nova conta
+    User -> ConfirmAccount: confirmar_conta(email_status)
+    ConfirmAccount -> System: controler_confirmar_conta(email_status == true)
+    System -> DB: controler_confirmar_conta(email_status == true)
+    rnote over System #FFAAAA: Erro ao confirmar contam token invalido\ne deve retornar uma mensagem\nde erro para o usuario.
+    System -[#red]x ConfirmAccount: HttpsResponse(400, "token invalido")
+else
+    DB -[#green]> System:
+    System -[#green]> ConfirmAccount: HTTPResponse(204, "Conta confirmada com sucesso")
+    note over ConfirmAccount: Usuário deve ser redirecionado para tela de logins
+    Login -[#green]x ConfirmAccount: redirect()
+
+end
+
+
+User -> RecoveryPassword: recuperar(email: string)
+RecoveryPassword-> System : controlador_recuperar_senha(email: string): User
+System -> DB: buscar_email_usuario(email: string): User
+
+alt Email === null
+    rnote over System #FFAAAA: Email digitado não foi encontrado\ne deve retornar uma mensagem\nde erro para o usuario.
+    DB --[#red]> System: new Error("Email não encontrado")
+    System -[#red]x RecoveryPassword: HttpsResponse(401, "Email invalido")
+else
+    rnote over System #c0e9dd: Email enviado, por favor confira sua caixa de msg.\ne deve retornar uma mensagem\nde sucesso para o usuario.
+    DB --[#green]> System:
+    System -[#green]> RecoveryPassword: HttpsResponse(200, "Email enviado com sucesso")
+    User -> NewPassword: recuperar(email: string)
+    NewPassword-> System: controlar_nova_senha(email: string)
+    System-> DB: salvar_nova_senha(email: string)
+    rnote over System #FFAAAA: Nova senha contem erro\ne deve retornar uma mensagem\nde erro para o usuario.
+    DB --[#red]> System: new Error("Senha invalida")
+    System -[#red]x NewPassword: HttpsResponse(401, "senha invalida")
+else
+    DB -[#green]> System:
+    System -[#green]> NewPassword: HTTPResponse(204, "Nova senha cadastrada com sucesso")
+    note over NewPassword: Usuário deve ser redirecionado para tela de logins
+    Login -[#green]x NewPassword: redirect()
+end
+
+@endum1
