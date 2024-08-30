@@ -6,8 +6,7 @@ import { getByIdQuestion } from "./get-by-id-question";
 import { getByTextTypedQuestion } from "./get-by-text-typed";
 
 export async function questionRoutes(app: FastifyInstance) {
-  // app.addHook("onRequest", verifyJwtAuth);
-  app.post("/question", createQuestion);
+  app.post("/question", { onRequest: [verifyJwtAuth] }, createQuestion);
   app.get("/question", getAllQuestion);
   app.get("/question/id", getByIdQuestion);
   app.get("/search/q", getByTextTypedQuestion);
