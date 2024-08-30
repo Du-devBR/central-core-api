@@ -59,14 +59,14 @@ model Question {
 model Answer {
   id           String    @id @default(uuid())
   content      String
-  likes        Int
+  likes        Int?
   cretated_at  DateTime  @default(now())
   modified_at  DateTime?
   question_id  String
   question     Question  @relation(fields: [question_id], references: [id])
   user_id      String
   user         User      @relation(fields: [user_id], references: [id])
-  parent_id    String    @default(uuid())
+  parent_id    String?
   parent       Answer?   @relation("ChildAnswers", fields: [parent_id], references: [id])
   childAnswers Answer[]  @relation("ChildAnswers")
 
